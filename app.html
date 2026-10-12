@@ -1,0 +1,259 @@
+<title>Claude Skirt</title>
+<meta name="description" content="A bee-bot ballerina in a fake Blender viewport. Order a dance; a fruit-fly brain model steers her spins.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;1,6..96,500;1,6..96,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a Blender 4 window — header, 3D viewport + N-panel sidebar, timeline — with a ballet playbill set inside the sidebar. */
+:root {
+  --win: #161616;      /* gaps between editors */
+  --hdr: #303030;      /* header + timeline */
+  --panel: #2a2a2a;    /* sidebar region */
+  --sub: #353535;      /* panel boxes */
+  --btn: #4a4a4a;      /* regular widget */
+  --btn-hi: #5a5a5a;
+  --field: #1f1f1f;    /* number fields */
+  --line: #121212;
+  --text: #e8e8e8;
+  --text-2: #a9a9a9;
+  --text-3: #7d7d7d;
+  --blue: #4772b3;     /* Blender selection blue */
+  --blue-hi: #5680c2;
+  --claude: #d97757;   /* the skirt */
+  --claude-hi: #f0a080;
+  --good: #8bdc00;
+  --ui: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --display: 'Bodoni Moda', 'Didot', 'Bodoni 72', 'Times New Roman', serif;
+  --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { height: 100%; margin: 0; }
+body { background: var(--win); color: var(--text); font: 13px/1.35 var(--ui); overflow: hidden; padding-inline: 16px; padding-block: 0; -webkit-font-smoothing: antialiased; }
+button { font: inherit; color: inherit; }
+#app { height: 100%; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 2px; padding-block: 6px; }
+
+/* ---- header */
+.topbar { display: flex; align-items: center; gap: 6px; padding: 5px 8px; background: var(--hdr); border-radius: 6px 6px 0 0; min-width: 0; }
+.pill { display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 9px; border: 0; border-radius: 5px; background: var(--btn); color: var(--text); white-space: nowrap; cursor: default; }
+.pill.icon { width: 32px; justify-content: center; padding: 0; }
+button.pill { cursor: pointer; }
+button.pill:hover { background: var(--btn-hi); }
+button.pill:focus-visible, .dance button:focus-visible, .tab:focus-visible, .nav button:focus-visible, #clap:focus-visible { outline: 2px solid var(--claude-hi); outline-offset: 1px; }
+.pill.on { background: var(--blue); }
+.menus { display: flex; gap: 2px; }
+.menus span { padding: 4px 8px; border-radius: 4px; color: var(--text); }
+.menus span:hover { background: var(--btn); }
+.spacer { flex: 1; }
+.seg { display: inline-flex; border-radius: 5px; overflow: hidden; }
+.seg .pill { border-radius: 0; }
+.mode-dot { width: 10px; height: 10px; border: 2px solid #e8964a; border-radius: 2px; }
+.chev { width: 7px; height: 7px; border-right: 1.5px solid var(--text-2); border-bottom: 1.5px solid var(--text-2); transform: rotate(45deg) translateY(-2px); }
+
+/* ---- work area */
+.work { display: grid; grid-template-columns: minmax(0, 1fr) 344px; gap: 2px; min-height: 0; }
+.viewport { position: relative; min-width: 0; min-height: 0; background: #3f3f3f; overflow: hidden; }
+#gl { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+#gl:active { cursor: grabbing; }
+.vp-text { position: absolute; left: 12px; top: 10px; font-weight: 500; text-shadow: 0 1px 2px #000a; pointer-events: none; font-variant-numeric: tabular-nums; }
+.vp-text div + div { color: var(--text); opacity: 0.95; }
+#ov { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+#gizmo { position: absolute; right: 8px; top: 8px; width: 120px; height: 120px; cursor: pointer; }
+.nav { position: absolute; right: 50px; top: 132px; display: grid; gap: 6px; }
+.nav button { width: 34px; height: 34px; border-radius: 50%; border: 0; background: #1c1c1cb0; display: grid; place-items: center; cursor: pointer; }
+.nav button:hover { background: #2c2c2cd0; }
+.nav button.on { background: var(--blue); }
+.nav svg { width: 18px; height: 18px; stroke: #ececec; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.now { position: absolute; left: 12px; bottom: 12px; display: grid; gap: 2px; pointer-events: none; max-width: min(70%, 420px); }
+.now .eyebrow { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-2); }
+.now .title { font-family: var(--display); font-style: italic; font-weight: 700; font-size: clamp(26px, 3.6vw, 44px); line-height: 1.02; color: #fff6ee; text-shadow: 0 2px 18px #0008; text-wrap: balance; }
+.now .move { font-family: var(--mono); font-size: 12px; color: var(--claude-hi); }
+.judge { position: absolute; left: 50%; top: 18%; transform: translateX(-50%); font-family: var(--display); font-style: italic; font-weight: 700; font-size: 38px; color: #fff; text-shadow: 0 2px 16px #000a; pointer-events: none; opacity: 0; transition: opacity 0.35s, transform 0.35s; }
+.judge.show { opacity: 1; transform: translate(-50%, -6px); }
+.judge.perfect { color: var(--claude-hi); }
+.hint { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); background: #1c1c1cd8; padding: 7px 12px; border-radius: 6px; color: var(--text); white-space: nowrap; pointer-events: none; }
+#clap { position: absolute; right: 16px; bottom: 16px; width: 86px; height: 86px; border-radius: 50%; border: 0; background: var(--claude); color: #1a0f0a; font-weight: 600; letter-spacing: 0.04em; box-shadow: 0 6px 24px #0007; cursor: pointer; display: grid; place-items: center; touch-action: manipulation; }
+#clap:active { transform: scale(0.94); background: var(--claude-hi); }
+#clap small { display: block; font-weight: 500; opacity: 0.75; font-size: 11px; }
+.err { position: absolute; inset: 0; display: grid; place-items: center; padding: 24px; text-align: center; color: var(--text); }
+
+/* ---- sidebar (Blender N-panel with tabs on the edge) */
+.sidebar { display: grid; grid-template-columns: minmax(0, 1fr) 28px; background: var(--panel); min-height: 0; }
+.tabs { display: flex; flex-direction: column; gap: 2px; padding: 8px 2px; background: #232323; }
+.tab { writing-mode: vertical-rl; border: 0; border-radius: 4px; padding: 12px 4px; background: var(--btn); color: var(--text-2); cursor: pointer; font-size: 12px; }
+.tab.on { background: var(--sub); color: var(--text); box-shadow: inset 2px 0 0 var(--claude); }
+.panels { min-height: 0; overflow-y: auto; padding: 10px 10px 14px; display: grid; align-content: start; gap: 10px; }
+.box { background: var(--sub); border-radius: 6px; padding: 10px 12px; display: grid; gap: 8px; }
+.box h3 { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.02em; display: flex; align-items: center; gap: 6px; }
+.box h3::before { content: ''; width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 6px solid var(--text-2); }
+.box p { margin: 0; color: var(--text-2); max-width: 60ch; }
+.playbill-head { display: grid; gap: 2px; padding: 4px 2px 2px; }
+.playbill-head .kicker { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--claude-hi); }
+.playbill-head .big { font-family: var(--display); font-weight: 500; font-size: 30px; line-height: 1; text-wrap: balance; }
+.playbill-head .big em { font-weight: 700; }
+.dance { display: grid; grid-template-columns: 26px minmax(0, 1fr) auto; gap: 4px 10px; align-items: center; padding: 10px 10px; border-radius: 6px; background: var(--sub); position: relative; overflow: hidden; }
+.dance .no { font-family: var(--display); font-style: italic; font-size: 22px; color: var(--text-3); text-align: center; }
+.dance .name { font-family: var(--display); font-style: italic; font-weight: 700; font-size: 20px; line-height: 1.1; }
+.dance .meta { grid-column: 2 / 3; font-family: var(--mono); font-size: 11px; color: var(--text-2); font-variant-numeric: tabular-nums; }
+.dance .desc { grid-column: 2 / 4; color: var(--text-2); font-size: 12px; }
+.dance button { grid-row: 1 / 3; grid-column: 3; height: 30px; padding: 0 12px; border: 0; border-radius: 5px; background: var(--btn); cursor: pointer; font-weight: 600; }
+.dance button:hover { background: var(--btn-hi); }
+.dance.playing { box-shadow: inset 3px 0 0 var(--claude); }
+.dance.playing button { background: var(--claude); color: #1a0f0a; }
+.dance .bar { position: absolute; left: 0; bottom: 0; height: 2px; background: var(--claude); width: 0; }
+.dance .best { color: var(--claude-hi); }
+.queue { display: grid; gap: 4px; }
+.queue .row { display: flex; align-items: center; gap: 8px; background: var(--field); border-radius: 4px; padding: 5px 8px; }
+.queue .row span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.queue .row button { border: 0; background: transparent; color: var(--text-2); cursor: pointer; padding: 0 4px; font-size: 15px; }
+.empty { color: var(--text-3); font-style: italic; }
+#brain { width: 100%; aspect-ratio: 1 / 1.08; max-width: 100%; display: block; background: var(--field); border-radius: 6px; }
+.toggle { display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; }
+.toggle input { accent-color: var(--blue); width: 15px; height: 15px; }
+.legend { display: grid; grid-template-columns: auto 1fr; gap: 3px 8px; font-size: 12px; color: var(--text-2); }
+.legend b { color: var(--text); font-weight: 600; font-family: var(--mono); font-size: 11px; }
+.fields { display: grid; grid-template-columns: 70px repeat(3, minmax(0, 1fr)); gap: 3px; align-items: center; font-variant-numeric: tabular-nums; }
+.fields label { color: var(--text-2); }
+.fields output { background: var(--field); border-radius: 4px; padding: 4px 6px; font-family: var(--mono); font-size: 11px; text-align: right; overflow: hidden; }
+.refs { margin: 0; padding-left: 16px; color: var(--text-2); display: grid; gap: 4px; font-size: 12px; }
+
+/* ---- timeline */
+.timeline { background: var(--hdr); border-radius: 0 0 6px 6px; display: grid; grid-template-rows: 32px 58px; min-width: 0; }
+.tl-head { display: flex; align-items: center; gap: 8px; padding: 0 8px; min-width: 0; }
+.tl-head .menus span { font-size: 12px; }
+.transport { display: inline-flex; gap: 2px; }
+.transport .pill { width: 30px; height: 24px; padding: 0; justify-content: center; }
+.score { display: flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 12px; color: var(--text-2); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.score b { color: var(--text); font-weight: 500; }
+.meter { width: 90px; height: 8px; background: var(--field); border-radius: 4px; overflow: hidden; }
+.meter i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--claude), var(--claude-hi)); transition: width 0.15s; }
+.frame-field { font-family: var(--mono); font-size: 12px; background: var(--blue); border-radius: 4px; padding: 3px 10px; min-width: 52px; text-align: center; font-variant-numeric: tabular-nums; }
+.range { font-family: var(--mono); font-size: 12px; background: var(--btn); border-radius: 4px; padding: 3px 8px; color: var(--text-2); white-space: nowrap; }
+.range b { color: var(--text); font-weight: 500; }
+#tl { width: 100%; height: 58px; display: block; background: #282828; border-radius: 0 0 6px 6px; }
+
+@media (max-width: 860px) {
+  .menus, .center, .range, .tl-head .menus { display: none !important; }
+}
+@media (max-width: 760px) {
+  body { padding-inline: 16px; }
+  .work { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(260px, 52%) minmax(0, 1fr); }
+  .sidebar { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
+  .tabs { flex-direction: row; padding: 4px; order: -1; }
+  .tab { writing-mode: horizontal-tb; padding: 6px 12px; flex: 1; }
+  .tab.on { box-shadow: inset 0 -2px 0 var(--claude); }
+  #gizmo { width: 92px; height: 92px; }
+  .nav { right: 37px; top: 100px; gap: 4px; }
+  .nav button { width: 30px; height: 30px; }
+  #clap { width: 72px; height: 72px; right: 12px; bottom: 12px; }
+  .now .title { font-size: 26px; }
+  .timeline { grid-template-rows: 30px 46px; }
+  #tl { height: 46px; }
+  .score .label { display: none; }
+  .hint { white-space: normal; text-align: center; width: max-content; max-width: 80%; bottom: 96px; }
+}
+@media (prefers-reduced-motion: reduce) { .judge { transition: none; } }
+</style>
+
+<div id="app">
+  <header class="topbar">
+    <span class="pill icon" title="3D Viewport"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#e8e8e8" stroke-width="1.4"><path d="M3 5.5 8 3l5 2.5v5L8 13l-5-2.5z"/><path d="M3 5.5 8 8l5-2.5M8 8v5"/></svg></span>
+    <span class="pill"><i class="mode-dot"></i>Object Mode <i class="chev"></i></span>
+    <nav class="menus" aria-label="Viewport menus"><span>View</span><span>Select</span><span>Add</span><span>Object</span></nav>
+    <span class="spacer"></span>
+    <span class="pill center"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#e8e8e8" stroke-width="1.4"><circle cx="7" cy="7" r="5"/></svg>Global <i class="chev"></i></span>
+    <span class="spacer"></span>
+    <button class="pill on" id="btn-overlays" title="Toggle the floor grid and axes" aria-pressed="true"><svg width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="#fff" stroke-width="1.5"><circle cx="6.5" cy="7" r="4.5"/><circle cx="11.5" cy="7" r="4.5"/></svg></button>
+    <button class="pill on" id="btn-gizmo" title="Toggle the navigation gizmo" aria-pressed="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="1.5"><path d="M3 13 13 3M13 3H8M13 3v5"/></svg></button>
+    <span class="seg" title="Viewport shading: only Solid is available here">
+      <span class="pill icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#e8e8e8" stroke-width="1.3"><circle cx="8" cy="8" r="6"/><ellipse cx="8" cy="8" rx="6" ry="2.2"/><path d="M8 2v12"/></svg></span>
+      <span class="pill icon on"><svg width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" fill="#f2f2f2"/></svg></span>
+      <span class="pill icon"><svg width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" fill="#777" stroke="#e8e8e8" stroke-width="1.2"/><path d="M3.8 12.2A6 6 0 0 1 12.2 3.8z" fill="#e8e8e8"/></svg></span>
+      <span class="pill icon"><svg width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" fill="#cfcfcf"/><circle cx="6" cy="5.6" r="1.6" fill="#fff"/></svg></span>
+    </span>
+  </header>
+
+  <main class="work">
+    <section class="viewport" aria-label="3D viewport">
+      <canvas id="gl" aria-label="The bee-bot ballerina in a Blender-style viewport. Drag to orbit, scroll or pinch to zoom."></canvas>
+      <div class="vp-text"><div>User Perspective</div><div id="vpinfo">(1) Collection | Claude Skirt</div></div>
+      <canvas id="ov" aria-hidden="true"></canvas>
+      <canvas id="gizmo" width="240" height="240" aria-label="Navigation gizmo: click an axis to snap the view"></canvas>
+      <div class="nav">
+        <button id="zin" title="Zoom in" aria-label="Zoom in"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5M10.5 8v5M8 10.5h5"/></svg></button>
+        <button id="zout" title="Zoom out" aria-label="Zoom out"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5M8 10.5h5"/></svg></button>
+        <button id="autocam" class="on" title="Camera follows the dance" aria-label="Auto camera" aria-pressed="true"><svg viewBox="0 0 24 24"><rect x="3" y="8" width="12" height="9" rx="1.5"/><path d="M15 11l6-3v9l-6-3z"/><circle cx="6.5" cy="5.5" r="2"/><circle cx="11.5" cy="5.5" r="2"/></svg></button>
+        <button id="mute" title="Sound" aria-label="Mute" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z"/><path id="mute-wave" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/></svg></button>
+      </div>
+      <div class="now"><span class="eyebrow" id="now-eyebrow">On stage</span><span class="title" id="now-title">Claude Skirt</span><span class="move" id="now-move">waiting for a request</span></div>
+      <div class="judge" id="judge"></div>
+      <div class="hint" id="hint">Order a dance to start. Clap on the beat with Space.</div>
+      <button id="clap" aria-label="Clap on the beat">CLAP<small>Space</small></button>
+    </section>
+
+    <aside class="sidebar" aria-label="Sidebar">
+      <div class="panels">
+        <div id="tab-dances" class="tabpanel">
+          <div class="playbill-head"><span class="kicker">Tonight in the viewport</span><span class="big">The <em>Claude Skirt</em> Ballet</span></div>
+          <div id="dances" style="display:grid;gap:8px;margin-top:10px"></div>
+          <div class="box" style="margin-top:10px"><h3>Up next</h3><div class="queue" id="queue"><span class="empty">Nothing queued. Order more than one dance and they play in order.</span></div></div>
+        </div>
+        <div id="tab-brain" class="tabpanel" hidden>
+          <div class="box">
+            <h3>Fly Brain</h3>
+            <canvas id="brain" width="560" height="604" aria-label="Live activity of the simulated fly brain"></canvas>
+            <label class="toggle"><input type="checkbox" id="b-steer" checked> Brain steers her spins</label>
+            <label class="toggle"><input type="checkbox" id="b-vision" checked> Visual landmark (turn off to watch her drift)</label>
+          </div>
+          <div class="box">
+            <h3>How it works</h3>
+            <p>Her heading lives in a ring of 16 E-PG neurons, like the compass in a fruit fly's central complex. A bump of activity sits on the ring. When the choreography asks for a turn, P-EN neurons push the bump around the ring, and her body follows the bump. Δ7 neurons inhibit the whole ring so only one bump survives.</p>
+            <p>A landmark input pins the bump to where she should face, the way a fly uses the sun. Turn it off and small errors pile up while she spins.</p>
+            <p>Her steps come from a half-center oscillator: two neurons that inhibit each other and tire out in turn. Each beat of the music reaches it through the antennae, which is how flies hear.</p>
+            <div class="legend"><b>E-PG</b><span>heading ring</span><b>P-EN</b><span>turn left / right</span><b>Δ7</b><span>global inhibition</span><b>CPG</b><span>step rhythm</span><b>JO</b><span>Johnston's organ, the antenna "ear"</span></div>
+          </div>
+          <div class="box"><h3>Papers behind the model</h3>
+            <ol class="refs"><li>Seelig &amp; Jayaraman, Nature 2015: landmark orientation and angular path integration.</li><li>Kim et al., Science 2017: ring attractor dynamics in the Drosophila central brain.</li><li>Green et al., Nature 2017: a neural circuit architecture for angular integration.</li></ol>
+          </div>
+        </div>
+        <div id="tab-item" class="tabpanel" hidden>
+          <div class="box">
+            <h3>Transform</h3>
+            <div class="fields">
+              <label>Location</label><output id="lx">0 m</output><output id="ly">0 m</output><output id="lz">0 m</output>
+              <label>Rotation</label><output id="rx">0°</output><output id="ry">0°</output><output id="rz">0°</output>
+              <label>Scale</label><output>1.000</output><output>1.000</output><output>1.000</output>
+            </div>
+          </div>
+          <div class="box">
+            <h3>Object</h3>
+            <div class="legend"><b>Name</b><span>Claude Skirt</span><b>Parts</b><span id="o-parts">0</span><b>Vertices</b><span id="o-verts">0</span><b>Skirt</b><span>Claude spark outline, 600 samples, petals lift around limbs</span><b>FPS</b><span id="o-fps">0</span></div>
+          </div>
+          <div class="box"><h3>Built without Blender</h3><p>The character is generated from math at load time: lathes, sweeps and superellipsoids. Arms and legs use two-bone IK. The renderer is raw WebGL2, and the music is synthesized live with Web Audio.</p></div>
+        </div>
+      </div>
+      <nav class="tabs" role="tablist" aria-label="Sidebar tabs">
+        <button class="tab on" role="tab" data-tab="dances" aria-selected="true">Dances</button>
+        <button class="tab" role="tab" data-tab="brain" aria-selected="false">Fly Brain</button>
+        <button class="tab" role="tab" data-tab="item" aria-selected="false">Item</button>
+      </nav>
+    </aside>
+  </main>
+
+  <footer class="timeline">
+    <div class="tl-head">
+      <nav class="menus"><span>Playback</span><span>Keying</span><span>View</span><span>Marker</span></nav>
+      <span class="transport">
+        <button class="pill" id="t-skip" title="Skip this dance" aria-label="Skip this dance"><svg width="14" height="14" viewBox="0 0 14 14" fill="#e8e8e8"><path d="M2 2l7 5-7 5zM10 2h2v10h-2z"/></svg></button>
+      </span>
+      <span class="spacer"></span>
+      <span class="score"><span class="label">Score</span><b id="score">0</b><span class="label">Combo</span><b id="combo">×0</b><span class="label">Bravo</span><span class="meter"><i id="bravo"></i></span></span>
+      <span class="spacer"></span>
+      <span class="frame-field" id="frame">1</span>
+      <span class="range">Start <b>1</b></span><span class="range">End <b id="endf">1</b></span>
+    </div>
+    <canvas id="tl" aria-label="Timeline with keyframes and beats"></canvas>
+  </footer>
+</div>
+<script type="module" src="src/main.js"></script>

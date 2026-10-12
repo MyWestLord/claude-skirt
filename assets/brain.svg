@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 580" width="1200" height="580" font-family="Inter, Segoe UI, system-ui, sans-serif">
+<rect width="1200" height="580" rx="18" fill="#1f1f1f"/>
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d9d9d9"/></marker>
+<marker id="ao" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#f0a080"/></marker></defs>
+<text x="40" y="44" fill="#f0a080" font-size="15" font-weight="600" letter-spacing="2.5">HER HEADING: A RING ATTRACTOR</text>
+<path d="M265.2,109.2 A190,190 0 0 1 334.8,109.2 L320.5,185.9 A112,112 0 0 0 279.5,185.9 Z" fill="rgb(225,142,94)"/>
+<path d="M339.3,110.1 A190,190 0 0 1 403.7,136.8 L361.1,202.1 A112,112 0 0 0 323.2,186.4 Z" fill="rgb(180,102,72)"/>
+<path d="M407.4,139.3 A190,190 0 0 1 456.7,188.6 L392.4,232.7 A112,112 0 0 0 363.3,203.6 Z" fill="rgb(110,64,59)"/>
+<path d="M459.2,192.3 A190,190 0 0 1 485.9,256.7 L409.6,272.8 A112,112 0 0 0 393.9,234.9 Z" fill="rgb(60,56,58)"/>
+<path d="M486.8,261.2 A190,190 0 0 1 486.8,330.8 L410.1,316.5 A112,112 0 0 0 410.1,275.5 Z" fill="rgb(60,56,58)"/>
+<path d="M485.9,335.3 A190,190 0 0 1 459.2,399.7 L393.9,357.1 A112,112 0 0 0 409.6,319.2 Z" fill="rgb(60,56,58)"/>
+<path d="M456.7,403.4 A190,190 0 0 1 407.4,452.7 L363.3,388.4 A112,112 0 0 0 392.4,359.3 Z" fill="rgb(60,56,58)"/>
+<path d="M403.7,455.2 A190,190 0 0 1 339.3,481.9 L323.2,405.6 A112,112 0 0 0 361.1,389.9 Z" fill="rgb(60,56,58)"/>
+<path d="M334.8,482.8 A190,190 0 0 1 265.2,482.8 L279.5,406.1 A112,112 0 0 0 320.5,406.1 Z" fill="rgb(60,56,58)"/>
+<path d="M260.7,481.9 A190,190 0 0 1 196.3,455.2 L238.9,389.9 A112,112 0 0 0 276.8,405.6 Z" fill="rgb(60,56,58)"/>
+<path d="M192.6,452.7 A190,190 0 0 1 143.3,403.4 L207.6,359.3 A112,112 0 0 0 236.7,388.4 Z" fill="rgb(60,56,58)"/>
+<path d="M140.8,399.7 A190,190 0 0 1 114.1,335.3 L190.4,319.2 A112,112 0 0 0 206.1,357.1 Z" fill="rgb(60,56,58)"/>
+<path d="M113.2,330.8 A190,190 0 0 1 113.2,261.2 L189.9,275.5 A112,112 0 0 0 189.9,316.5 Z" fill="rgb(60,56,58)"/>
+<path d="M114.1,256.7 A190,190 0 0 1 140.8,192.3 L206.1,234.9 A112,112 0 0 0 190.4,272.8 Z" fill="rgb(60,56,58)"/>
+<path d="M143.3,188.6 A190,190 0 0 1 192.6,139.3 L236.7,203.6 A112,112 0 0 0 207.6,232.7 Z" fill="rgb(110,64,59)"/>
+<path d="M196.3,136.8 A190,190 0 0 1 260.7,110.1 L276.8,186.4 A112,112 0 0 0 238.9,202.1 Z" fill="rgb(180,102,72)"/>
+<text x="300" y="288" fill="#e8e8e8" font-size="22" font-weight="600" text-anchor="middle">E-PG</text>
+<text x="300" y="316" fill="#a9a9a9" font-size="14" text-anchor="middle">16 wedges, one bump</text>
+<line x1="300" y1="332" x2="300" y2="194" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+<circle cx="300" cy="86" r="9" fill="#5680c2"/>
+<text x="318" y="91" fill="#a9c1ea" font-size="14">visual landmark</text>
+<rect x="40" y="276" width="26" height="150" rx="4" fill="#2e2e2e"/><rect x="40" y="356" width="26" height="70" rx="4" fill="#d97757"/>
+<text x="53" y="451" fill="#a9a9a9" font-size="14" text-anchor="middle">P-EN L</text>
+<rect x="534" y="276" width="26" height="150" rx="4" fill="#2e2e2e"/><rect x="534" y="416" width="26" height="10" rx="4" fill="#d97757"/>
+<text x="547" y="451" fill="#a9a9a9" font-size="14" text-anchor="middle">P-EN R</text>
+<path d="M66 272 Q 80 176 132 226" fill="none" stroke="#f0a080" stroke-width="2.5" marker-end="url(#ao)"/>
+<text x="180" y="526" fill="#a9a9a9" font-size="14" text-anchor="end">Δ7</text>
+<rect x="192" y="515" width="216" height="12" rx="6" fill="#2e2e2e"/><rect x="192" y="515" width="92" height="12" rx="6" fill="#8a8a8a"/>
+<text x="418" y="526" fill="#7d7d7d" font-size="13">global inhibition</text>
+<g font-size="16" fill="#d9d9d9">
+<text x="640" y="104" fill="#e8e8e8" font-size="19" font-weight="600">1. The choreography asks for a turn</text>
+<text x="640" y="130">"Pirouette, three turns" becomes a turn-rate command.</text>
+<text x="640" y="176" fill="#e8e8e8" font-size="19" font-weight="600">2. P-EN neurons shift the bump</text>
+<text x="640" y="202">Left or right P-EN cells project one wedge over,</text>
+<text x="640" y="224">so the bump of activity slides around the ring.</text>
+<text x="640" y="270" fill="#e8e8e8" font-size="19" font-weight="600">3. Her body follows the bump</text>
+<text x="640" y="296">The decoded bump angle is her yaw, every frame.</text>
+<text x="640" y="342" fill="#e8e8e8" font-size="19" font-weight="600">4. A landmark keeps her honest</text>
+<text x="640" y="368">Without it, small errors pile up and she drifts.</text>
+</g>
+<text x="640" y="440" fill="#f0a080" font-size="15" font-weight="600" letter-spacing="2.5">HER STEPS: A HALF-CENTER OSCILLATOR</text>
+<g font-size="15" fill="#d9d9d9">
+<rect x="640" y="462" width="132" height="44" rx="8" fill="#2e2e2e"/><text x="706" y="489" text-anchor="middle">beat → JO</text>
+<line x1="776" y1="484" x2="828" y2="484" stroke="#d9d9d9" stroke-width="2" marker-end="url(#ar)"/>
+<rect x="832" y="462" width="148" height="44" rx="8" fill="#2e2e2e"/><text x="906" y="489" text-anchor="middle">CPG ⇄ CPG</text>
+<line x1="984" y1="484" x2="1036" y2="484" stroke="#d9d9d9" stroke-width="2" marker-end="url(#ar)"/>
+<rect x="1040" y="462" width="124" height="44" rx="8" fill="#2e2e2e"/><text x="1102" y="489" text-anchor="middle">pointe steps</text>
+</g>
+<text x="640" y="534" fill="#7d7d7d" font-size="13">JO is Johnston's organ, the antenna "ear" of a fly.</text>
+<text x="640" y="554" fill="#7d7d7d" font-size="13">The two CPG neurons inhibit each other and tire out in turn.</text>
+</svg>

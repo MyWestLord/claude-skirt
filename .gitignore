@@ -1,0 +1,4 @@
+__pycache__/
+*.pyc
+tools/offline/gif-frames/
+.DS_Store
