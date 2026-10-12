@@ -153,14 +153,15 @@ button.pill:focus-visible, .dance button:focus-visible, .tab:focus-visible, .nav
   .tab { writing-mode: horizontal-tb; padding: 6px 12px; flex: 1; }
   .tab.on { box-shadow: inset 0 -2px 0 var(--claude); }
   #gizmo { width: 92px; height: 92px; }
-  .nav { right: 37px; top: 100px; gap: 4px; }
+  .nav { left: 10px; right: auto; top: 58px; gap: 6px; grid-auto-flow: column; }
   .nav button { width: 30px; height: 30px; }
+  .nav svg { width: 16px; height: 16px; }
   #clap { width: 72px; height: 72px; right: 12px; bottom: 12px; }
   .now .title { font-size: 26px; }
   .timeline { grid-template-rows: 30px 46px; }
   #tl { height: 46px; }
   .score .label { display: none; }
-  .hint { white-space: normal; text-align: center; width: max-content; max-width: 80%; bottom: 96px; }
+  .hint { white-space: normal; text-align: center; width: max-content; max-width: 70%; top: 98px; bottom: auto; left: 10px; transform: none; font-size: 12px; }
 }
 @media (prefers-reduced-motion: reduce) { .judge { transition: none; } }
 </style>
